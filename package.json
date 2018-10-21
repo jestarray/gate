@@ -1,0 +1,17 @@
+{
+  "name": "gate",
+  "version": "1.0.0",
+  "description": "an open source game made with phaser 3",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "jestarray",
+  "license": "MIT",
+  "devDependencies": {
+    "parcel-bundler": "^1.10.3"
+  }
+}
