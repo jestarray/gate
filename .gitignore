@@ -1,3 +1,8 @@
+/dist
+/lib
+
+.cache
+
 # Logs
 logs
 *.log
