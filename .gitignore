@@ -1,5 +1,7 @@
 /lib
-**/dist/*.js
+dist/*.js
+dist/*.map
+dist/*.html
 
 .cache
 
