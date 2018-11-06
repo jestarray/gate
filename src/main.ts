@@ -1,14 +1,14 @@
-/** @type {import("../typings/phaser")} */ 
+/** @type {import("../typings/phaser")} */
 
-import {LoadScene} from "./scenes/LoadScene";
-import {MenuScene} from "./scenes/MenuScene";
+import { LoadScene } from "./scenes/LoadScene";
+import { MenuScene } from "./scenes/MenuScene";
 let game = new Phaser.Game({
     width: 800,
     height: 600,
-    scene:[
+    scene: [
         LoadScene, MenuScene
     ],
-    render:{
+    render: {
         pixelArt: true
     }
 });
