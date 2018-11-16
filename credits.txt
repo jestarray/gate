@@ -3,3 +3,9 @@ https://freesound.org/people/Shuinvy/packs/14603/
 
 Sprites:
 http://untamed.wild-refuge.net/rmxpresources.php?characters
+https://opengameart.org/content/free-pixel-effects-pack
+
+LPC:
+https://opengameart.org/content/liberated-pixel-cup-0
+https://opengameart.org/content/lpc-heroine-2
+https://sanderfrenken.github.io/Universal-LPC-Spritesheet-Character-Generator/#
