@@ -1,4 +1,6 @@
 import { CST } from "../CST";
+import { CharacterSprite } from "../CharacterSprite";
+import { Sprite } from "../Sprite";
 
 export class PlayScene extends Phaser.Scene {
     anna!: Phaser.Physics.Arcade.Sprite;
@@ -59,7 +61,8 @@ export class PlayScene extends Phaser.Scene {
         this.textures.addSpriteSheetFromAtlas("hooded", { frameHeight: 64, frameWidth: 64, atlas: "characters", frame: "hooded" })
     }
     create() {
-        this.anna = this.physics.add.sprite(400, 400, "anna", 26).setScale(2);
+        let cat = new Sprite(this, 300, 20, CST.SPRITE.CAT).setScale(2);
+        this.anna = new CharacterSprite(this, 400, 400, "anna", 26);
         this.hooded = this.physics.add.sprite(200, 200, "hooded", 26).setScale(2).setImmovable(true);
         this.fireAttacks = this.physics.add.group();
         this.assassins = this.physics.add.group({ immovable: true });
@@ -82,8 +85,11 @@ export class PlayScene extends Phaser.Scene {
             }
         });
 
-        this.physics.world.addCollider(this.anna, this.assassins, (anna: Phaser.Physics.Arcade.Sprite, hooded: Phaser.Physics.Arcade.Sprite) => {
-            anna.destroy();
+        this.physics.world.addCollider(this.anna, this.assassins, (anna: CharacterSprite, hooded: Phaser.Physics.Arcade.Sprite) => {
+            anna.hp--;
+            if(anna.hp <= 0){
+                anna.destroy();
+            }
             hooded.destroy();
         });
 
