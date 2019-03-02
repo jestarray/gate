@@ -158,7 +158,7 @@ export class PlayScene extends Phaser.Scene {
         this.input.on("pointerdown", (pointer: Phaser.Input.Pointer)=>{
 
             //pixel position to tile position
-            let tile = mappy.getTileAt(mappy.worldToTileX(pointer.x), mappy.worldToTileX(pointer.y));
+            let tile = mappy.getTileAt(mappy.worldToTileX(pointer.x), mappy.worldToTileY(pointer.y));
 
             if(tile){
                 console.log(tile);
