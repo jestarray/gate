@@ -59,9 +59,14 @@ export class PlayScene extends Phaser.Scene {
             hideOnComplete: true
         });
         this.textures.addSpriteSheetFromAtlas("hooded", { frameHeight: 64, frameWidth: 64, atlas: "characters", frame: "hooded" })
+
+        this.load.image("terrain", "./assets/image/terrain_atlas.png");
+        this.load.image("items", "./assets/image/items.png");
+
+        this.load.tilemapTiledJSON("mappy", "./assets/maps/mappy.json")
+
     }
     create() {
-        let cat = new Sprite(this, 300, 20, CST.SPRITE.CAT).setScale(2);
         this.anna = new CharacterSprite(this, 400, 400, "anna", 26);
         this.hooded = this.physics.add.sprite(200, 200, "hooded", 26).setScale(2).setImmovable(true);
         this.fireAttacks = this.physics.add.group();
@@ -77,7 +82,7 @@ export class PlayScene extends Phaser.Scene {
         this.keyboard = this.input.keyboard.addKeys("W, A, S, D");
         this.input.on("pointermove", (pointer: Phaser.Input.Pointer) => {
             if (pointer.isDown) { //is clicking
-                let fire = this.add.sprite(pointer.x, pointer.y, "daze", "fire00.png").play("blaze");
+                let fire = this.add.sprite(pointer.worldX, pointer.worldY, "daze", "fire00.png").play("blaze");
                 this.fireAttacks.add(fire);
                 fire.on("animationcomplete", () => {
                     fire.destroy();
@@ -108,6 +113,68 @@ export class PlayScene extends Phaser.Scene {
                 this.assassins.add(this.physics.add.sprite(x, y, "hooded", 26).setScale(2).setImmovable(true));
             }
         });
+
+        let mappy = this.add.tilemap("mappy");
+
+        let terrain = mappy.addTilesetImage("terrain_atlas", "terrain");
+        let itemset = mappy.addTilesetImage("items");
+
+        //layers
+        let botLayer = mappy.createStaticLayer("bot", [terrain], 0, 0).setDepth(-1);
+        let topLayer = mappy.createStaticLayer("top", [terrain], 0, 0);
+
+        //map collisions
+        this.physics.add.collider(this.anna, topLayer);
+            //by tile property
+        topLayer.setCollisionByProperty({collides:true});
+
+            //by tile index
+        topLayer.setCollision([269,270,271,301,302,303,333,334,335])
+
+        //map events
+            //by location
+        topLayer.setTileLocationCallback(10, 8, 1, 1, ()=>{
+            alert("the sword calls to you!!!!");
+
+            //@ts-ignore
+            topLayer.setTileLocationCallback(10, 8, 1, 1, null)
+        });
+
+            //by index
+        topLayer.setTileIndexCallback([272,273,274, 304,305,306, 336,337,338], ()=>{
+            console.log("STOP STEPPING ON LAVA >:(")
+        });
+
+        //INTERACTIVE ITEMS FROM OBJECT LAYER
+        let items = mappy.createFromObjects("pickup", 1114, {key: CST.SPRITE.CAT}).map((sprite: Phaser.GameObjects.Sprite)=>{
+            sprite.setScale(2);
+            sprite.setInteractive();
+        });
+
+        this.input.on("gameobjectdown", (pointer: Phaser.Input.Pointer, obj: Phaser.GameObjects.Sprite)=> {
+            obj.destroy();
+        });
+
+        this.input.on("pointerdown", (pointer: Phaser.Input.Pointer)=>{
+
+            //pixel position to tile position
+            let tile = mappy.getTileAt(mappy.worldToTileX(pointer.x), mappy.worldToTileX(pointer.y));
+
+            if(tile){
+                console.log(tile);
+            }
+        });
+
+        this.cameras.main.startFollow(this.anna);
+        this.physics.world.setBounds(0,0, mappy.widthInPixels, mappy.heightInPixels);
+
+        //draw debug render hitboxes
+
+        topLayer.renderDebug(this.add.graphics(),{
+            tileColor: null, //non-colliding tiles
+            collidingTileColor: new Phaser.Display.Color(243, 134, 48, 200), // Colliding tiles,
+            faceColor: new Phaser.Display.Color(40, 39, 37, 255) // Colliding face edges
+        })
     }
     update(time: number, delta: number) { //delta 16.666 @ 60fps
 
