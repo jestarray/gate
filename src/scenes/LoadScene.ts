@@ -37,6 +37,7 @@ export class LoadScene extends Phaser.Scene {
         //load atlases
         this.load.atlas("characters", "./assets/sprite/characters.png", "./assets/sprite/characters.json")
         this.load.atlas("daze", "./assets/sprite/daze.png", "./assets/sprite/daze.json")
+        this.load.spritesheet("rapier", "./assets/sprite/WEAPON_rapier.png", {frameHeight: 192, frameWidth: 192});
 
         //load image, spritesheet, sound
         this.loadAudio();

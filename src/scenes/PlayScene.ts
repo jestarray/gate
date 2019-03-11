@@ -8,6 +8,7 @@ export class PlayScene extends Phaser.Scene {
     keyboard!: { [index: string]: Phaser.Input.Keyboard.Key };
     assassins!: Phaser.Physics.Arcade.Group;
     fireAttacks!: Phaser.Physics.Arcade.Group;
+    player!: Phaser.GameObjects.Container;
     constructor() {
         super({
             key: CST.SCENES.PLAY,
@@ -59,14 +60,45 @@ export class PlayScene extends Phaser.Scene {
             hideOnComplete: true
         });
         this.textures.addSpriteSheetFromAtlas("hooded", { frameHeight: 64, frameWidth: 64, atlas: "characters", frame: "hooded" })
+        this.textures.addSpriteSheetFromAtlas("mandy", { frameHeight: 64, frameWidth: 64, atlas: "characters", frame: "mandy" });
 
         this.load.image("terrain", "./assets/image/terrain_atlas.png");
         this.load.image("items", "./assets/image/items.png");
 
-        this.load.tilemapTiledJSON("mappy", "./assets/maps/mappy.json")
+        this.load.tilemapTiledJSON("mappy", "./assets/maps/mappy.json");
+
+
+        this.anims.create({
+            key: "mandyswordleft",
+            frameRate: 5,
+            frames: this.anims.generateFrameNumbers("mandy", {
+                start: 169,
+                end: 174
+            })
+        });
+
+        this.anims.create({
+            key: "sword_left",
+            frameRate: 5,
+            frames: this.anims.generateFrameNumbers("rapier", {
+                start: 6,
+                end: 11
+            }),
+            showOnStart: true,
+            hideOnComplete: true
+        });
 
     }
     create() {
+        this.player = this.add.container(200, 200, [this.add.sprite(0, 0, "mandy", 26), this.add.sprite(0,0, "rapier").setVisible(false)]).setDepth(1).setScale(2);
+        window.player = this.player;
+        
+        this.input.keyboard.on("keydown-F", ()=>{
+            this.player.list[0].play("mandyswordleft");
+            this.player.list[1].play("sword_left");
+
+        })
+        
         this.anna = new CharacterSprite(this, 400, 400, "anna", 26);
         this.hooded = this.physics.add.sprite(200, 200, "hooded", 26).setScale(2).setImmovable(true);
         this.fireAttacks = this.physics.add.group();
