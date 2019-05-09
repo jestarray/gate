@@ -17,5 +17,9 @@ let game = new Phaser.Game({
         arcade: {
             debug: true
         }
+    },
+    scale: {
+        mode: Phaser.Scale.FIT,
+        autoCenter: Phaser.Scale.CENTER_BOTH
     }
 });
